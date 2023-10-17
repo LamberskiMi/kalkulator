@@ -1,13 +1,21 @@
 import tkinter as tk
 from tkinter import END
+import operator
+
+ops = {
+    '+' : operator.add,
+    '-' : operator.sub,
+    '*' : operator.mul,
+    '/' : operator.truediv,
+    '**' : operator.pow,
+    '//' : operator.floordiv
+
+}
 
 import ttkbootstrap as tb
 
-global a
-a = 0
-global b
-b = 0
-variant = ""
+a = []
+variant = []
 
 
 def one():
@@ -55,59 +63,54 @@ def delete():
 
 
 def get_sum():
-    a = float(my_entry.get())
-    variant = "+"
+    global a
+    global variant
+    a.append(my_entry.get())
+    variant.append("+")
     my_entry.delete(0, END)
 
 
 def get_sub():
-    a = float(my_entry.get())
-    variant="-"
+    a.append(my_entry.get())
+    variant.append("-")
     my_entry.delete(0, END)
 
+
 def get_div():
-    a = float(my_entry.get())
-    variant="/"
+    a.append(my_entry.get())
+    variant.append("/")
     my_entry.delete(0, END)
 
 def get_multi():
-    a = float(my_entry.get())
-    variant="*"
+    a.append(my_entry.get())
+    variant.append("*")
     my_entry.delete(0, END)
 
 def get_expo():
-    a = float(my_entry.get())
-    variant = "**"
+    a.append(my_entry.get())
+    variant.append("**")
     my_entry.delete(0, END)
 
 def get_root_ext():
-    a = float(my_entry.get())
-    variant = "//"
+    a.append(my_entry.get())
+    variant.append("//")
     my_entry.delete(0, END)
 
+
 def equals():
-    global result
-    result=0
-    b = float(my_entry.get())
+    a.append(my_entry.get())
     my_entry.delete(0, END)
-    if variant == "+":
-        result = float(a + b)
-    elif variant == "-":
-        result = float(a - b)
-    elif variant == "/":
-        result = float(round(a / b, 2))
-    elif variant == "*":
-        result = float(a * b)
-    elif variant == "**":
-        result = float(a ** b)
-    elif variant == "//":
-        result = float(a ** (1 / b))
-    my_entry.insert(END, str(result))
+    result = 0
+    leng = int(len(a))
+    for i in range (leng-1):
+        print(ops[variant[i]](int(a[i]), int(a[i+1])))
+        my_entry.insert(END, ops[variant[i]](int(a[i]), int(a[i+1])))
 
 
 app = tb.Window(themename="darkly")
 app.title("Calculator")
 app.geometry('370x500')
+app.resizable(width=False, height=False)
 
 
 #Frame
