@@ -16,6 +16,7 @@ import ttkbootstrap as tb
 
 a = []
 variant = []
+ct = 0
 
 
 def one():
@@ -65,9 +66,22 @@ def delete():
 def get_sum():
     global a
     global variant
+    global ct
+    print(int(ct))
     a.append(my_entry.get())
     variant.append("+")
     my_entry.delete(0, END)
+    #do dopracowania dodawanie wielu wartości
+    leng = int(len(a))
+    if ct<=0:
+        ct+=1
+    if ct>0:
+        for i in range(leng-1):
+            print("operacja:", ops[variant[i]](int(a[i]), int(a[i+1])))
+            print("wartosci ", (int(a[i]), variant[i], int(a[i + 1])))
+            my_entry.insert(END, ops[variant[i]](int(a[i]), int(a[i+1])))
+        a.clear()
+        variant.clear()
 
 
 def get_sub():
@@ -102,9 +116,12 @@ def equals():
     my_entry.delete(0, END)
     result = 0
     leng = int(len(a))
-    for i in range (leng-1):
-        print(ops[variant[i]](int(a[i]), int(a[i+1])))
+    for i in range(leng-1):
+        print("operacja:", ops[variant[i]](int(a[i]), int(a[i+1])))
+        print("wartosci ", (int(a[i]), variant[i], int(a[i + 1])))
         my_entry.insert(END, ops[variant[i]](int(a[i]), int(a[i+1])))
+    a.clear()
+    variant.clear()
 
 
 app = tb.Window(themename="darkly")
