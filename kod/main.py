@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import END
 import operator
+import ttkbootstrap as tb
 
 ops = {
     '+' : operator.add,
@@ -12,11 +13,14 @@ ops = {
 
 }
 
-import ttkbootstrap as tb
-
 a = []
 variant = []
 ct = 0
+
+
+def globals_variables():
+    global a
+    global variant
 
 
 def one():
@@ -60,61 +64,119 @@ def zero():
 
 
 def delete():
+    global ct
     my_entry.delete(0, END)
+    ct = 0
+    a.clear()
+    variant.clear()
 
 
 def get_sum():
-    global a
-    global variant
     global ct
-    print(int(ct))
+    ct = 0
     a.append(my_entry.get())
     variant.append("+")
     my_entry.delete(0, END)
-    #do dopracowania dodawanie wielu wartości
     leng = int(len(a))
-    if ct<=0:
-        ct+=1
-    if ct>0:
+
+    # powiedzmy ze dodaje pare rzeczy ale psuje sie troche teraz, jakis problem z ifem i globalna zmienna(japitole)
+    print(ct)
+    for i in range(leng-1):
+
+        if ct <= 0:
+            print("jest ok")
+            my_entry.insert(END, ops[variant[i]](int(a[i]), int(a[i + 1])))
+            ct += 1
+
+        elif ct >= 1:
+            my_entry.delete(0, END)
+            print("nie jest ok")
+            tmp = my_entry.insert(END, ops[variant[i]](int(a[i]), int(a[i+1])))
+            a.clear()
+            variant.clear()
+            a[1] = tmp
+            my_entry.insert(END, ops[variant[i]](int(a[i]), int(a[i + 1])))
+    print(ct)
+
+
+def get_sub():
+    global ct
+    a.append(my_entry.get())
+    variant.append("-")
+    my_entry.delete(0, END)
+    leng = int(len(a))
+    if ct <= 0:
+        ct += 1
+    if ct > 0:
         for i in range(leng-1):
             print("operacja:", ops[variant[i]](int(a[i]), int(a[i+1])))
             print("wartosci ", (int(a[i]), variant[i], int(a[i + 1])))
             my_entry.insert(END, ops[variant[i]](int(a[i]), int(a[i+1])))
-        a.clear()
-        variant.clear()
-
-
-def get_sub():
-    a.append(my_entry.get())
-    variant.append("-")
-    my_entry.delete(0, END)
 
 
 def get_div():
+    global ct
     a.append(my_entry.get())
     variant.append("/")
     my_entry.delete(0, END)
+    leng = int(len(a))
+    if ct <= 0:
+        ct += 1
+    if ct > 0:
+        for i in range(leng-1):
+            print("operacja:", ops[variant[i]](int(a[i]), int(a[i+1])))
+            print("wartosci ", (int(a[i]), variant[i], int(a[i + 1])))
+            my_entry.insert(END, ops[variant[i]](int(a[i]), int(a[i+1])))
+
 
 def get_multi():
+    global ct
     a.append(my_entry.get())
     variant.append("*")
     my_entry.delete(0, END)
+    leng = int(len(a))
+    if ct <= 0:
+        ct += 1
+    if ct > 0:
+        for i in range(leng-1):
+            print("operacja:", ops[variant[i]](int(a[i]), int(a[i+1])))
+            print("wartosci ", (int(a[i]), variant[i], int(a[i + 1])))
+            my_entry.insert(END, ops[variant[i]](int(a[i]), int(a[i+1])))
+
 
 def get_expo():
+    global ct
     a.append(my_entry.get())
     variant.append("**")
     my_entry.delete(0, END)
+    leng = int(len(a))
+    if ct <= 0:
+        ct += 1
+    if ct > 0:
+        for i in range(leng-1):
+            print("operacja:", ops[variant[i]](int(a[i]), int(a[i+1])))
+            print("wartosci ", (int(a[i]), variant[i], int(a[i + 1])))
+            my_entry.insert(END, ops[variant[i]](int(a[i]), int(a[i+1])))
+
 
 def get_root_ext():
+    global ct
     a.append(my_entry.get())
     variant.append("//")
     my_entry.delete(0, END)
+    leng = int(len(a))
+    if ct <= 0:
+        ct += 1
+    if ct > 0:
+        for i in range(leng-1):
+            print("operacja:", ops[variant[i]](int(a[i]), int(a[i+1])))
+            print("wartosci ", (int(a[i]), variant[i], int(a[i + 1])))
+            my_entry.insert(END, ops[variant[i]](int(a[i]), int(a[i+1])))
 
 
 def equals():
     a.append(my_entry.get())
     my_entry.delete(0, END)
-    result = 0
     leng = int(len(a))
     for i in range(leng-1):
         print("operacja:", ops[variant[i]](int(a[i]), int(a[i+1])))
@@ -130,7 +192,7 @@ app.geometry('370x500')
 app.resizable(width=False, height=False)
 
 
-#Frame
+# Frame
 my_frame = tk.Frame(app)
 my_frame.pack()
 
@@ -141,17 +203,17 @@ button_frame = tk.Frame(app)
 button_frame.pack()
 
 
-#Style
+# Style
 numbers_Style = tb.Style()
 numbers_Style.configure('dark.TButton', font=("Helvetica", 24), width=4)
 
 
-#Entry Text
+# Entry Text
 my_entry = tb.Entry(my_frame,
                     font=("", 24))
 my_entry.pack(ipady=20)
 
-#Numbers
+# Numbers
 b_one = tb.Button(button_frame, text="1",
                         style="dark.TButton",
                         command=one)
@@ -214,7 +276,7 @@ b_equal = tb.Button(button_frame, text="=",
 b_equal.grid(row=4, column=2, ipadx=10, ipady=10, padx=1, pady=1)
 
 
-#Events
+# Events
 b_sum = tb.Button(events_frame, text="+",
                         width=2,
                         bootstyle="dark",
@@ -252,7 +314,4 @@ b_expo = tb.Button(events_frame, text="xⁿ",
 b_expo.grid(row=0, column=6, padx=1, pady=1)
 
 
-
-
 app.mainloop()
-
